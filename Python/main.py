@@ -102,6 +102,12 @@ def keyword_count(keyword):
     return pattern
 
 
+# Count ternary operators
+def ternary_sequences():
+    pattern = re.compile('\s\?\s')  # TODO is this right?
+    return pattern
+
+
 # Increment counts
 def increment_key_count_by_one(key, i_seq):
     if key not in i_seq:
@@ -124,6 +130,9 @@ def main():
     seq = {'idSeq': 0, 'charCount': 0, 'udSeq': 0, 'tbSeq': 0, 'spSeq': 0, 'wsSeq': 0, 'cuSeq': 0, 'tsSeq': 0,
            'emSeq': 0}
 
+    # numKeyword
+    lexical_keywords = ['for', 'do', 'while', 'if', 'else if', 'else', 'switch']
+
     # keywords in javascript from ECMAScript 6
     javascript_keywords = ['break', 'case', 'class', 'catch', 'const', 'continue', 'debugger', 'default', 'delete',
                            'do', 'else', 'export', 'extends', 'finally', 'for', 'function', 'if', 'import', 'in',
@@ -135,6 +144,9 @@ def main():
             increment_key_count_by_value('charCount', seq, len(l))
             underscores = underscore_split().findall(l)
             increment_key_count_by_value('udSeq', seq, len(underscores))
+            # Table 2 Lexical Features
+            ternary = ternary_sequences().findall(l)
+            increment_key_count_by_value('teSeq', seq, len(ternary))
             # Table 3 Layout Features
             tabs = tabs_count().findall(l)
             increment_key_count_by_value('tbSeq', seq, len(tabs))
@@ -159,6 +171,7 @@ def main():
         print "character count: ", seq['charCount']
         print "dict['idSeq']: ", seq['idSeq']
         print "underlines: ", seq['udSeq']
+        print "T2| ternary: ", seq['teSeq']
         print "T3| tabs: ", seq['tbSeq']
         print "T3| spaces: ", seq['spSeq']
         print "T3| empty lines count: ", seq['emSeq']
