@@ -9,7 +9,8 @@ $(document).ready(function() {
     	parent.postMessage('from HF, give status please', '*');
     });
 });
-
+// halp? functionality
+// ? : sup
 function saveVote(stat) {
 	var selectedVal = "";
 	var selected = $("#radioface input[type='radio']:checked");
@@ -45,13 +46,14 @@ function saveVote(stat) {
 	}
       
 
-		
+
 	requestData.answers = JSON.stringify(requestData.answers);
 	xhr.send(JSON.stringify(requestData));
 	$("#feedback").text("Thank you for your feedback!");
-	$("#feedback").show(500);
+	$("#feedback").show(500); 
 	setTimeout(function(){$("#feedback").hide(500)}, 5000);
     //$("#feedback").hide(500).delay(5000); Does not work
+    // test variance
 }
 
 function createCORSRequest(method, url) {
@@ -70,4 +72,4 @@ function createCORSRequest(method, url) {
         xhr = null;
     }
     return xhr;
-}
+} 
