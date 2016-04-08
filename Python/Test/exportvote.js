@@ -9,8 +9,8 @@ $(document).ready(function() {
     	parent.postMessage('from HF, give status please', '*');
     });
 });
-// halp? functionality
-// ? : sup
+// halp? functionality == ===
+// ? : sup != ! =
 function saveVote(stat) {
 	var selectedVal = "";
 	var selected = $("#radioface input[type='radio']:checked");

@@ -48,7 +48,7 @@ def white_space_count():
 
 
 # Inner word split
-def inner_word_split():
+def inner_word_split(): # TODO does not work in python
     pattern = re.compile('(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])')
     return pattern
 
@@ -68,7 +68,7 @@ def identifier_split():
 # Equals sign alignment of setting variables
 # TODO: how? is any = sign preceded or followed by a number of spaces > 1 proof of alignment?
 def equals_split():
-    pattern = re.compile('=')
+    pattern = re.compile('(?<!=|!)=(?!=)')
     return pattern
 
 
@@ -167,7 +167,6 @@ def main():
                                'do', 'else', 'export', 'extends', 'finally', 'for', 'function', 'if', 'import', 'in',
                                'instanceof', 'new', 'return', 'super', 'switch', 'this', 'throw', 'try', 'typeof', 'var',
                                'void', 'while', 'with', 'yield']
-
         with txt as t:
             for l in t:
                 increment_key_count_by_one('lineCount', seq)
@@ -184,6 +183,8 @@ def main():
                 comment = comment_split().findall(l)
                 if len(comment) > 0:
                     increment_key_count_by_one('coSeq', seq)
+                equals = equals_split().findall(l)
+                increment_key_count_by_value('eqSeq', seq, len(equals))
                 function = function_count().findall(l)
                 increment_key_count_by_value('fuSeq', seq, len(function))
                 var = var_count().findall(l)
@@ -226,6 +227,7 @@ def main():
             print "line count: ", seq['lineCount']
             print "character count: ", seq['charCount']
             print "underlines: ", seq['udSeq']
+            print "T2| literals (single equals): ", seq['eqSeq']
             print "T2| function count: ", seq['fuSeq']
             print "T2| var count: ", seq['vaSeq']
             print "T2| avgLineLength: ", average_length
