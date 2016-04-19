@@ -1,5 +1,5 @@
 {
-  "name": "Analysis",
+  "name": "analysis",
   "version": "0.0.1",
   "description": "Static and dynamic analysis",
   "main": "analysis.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.ncsu.edu/CSC510-Fall2014/Analysis.git"
+    "url": "https://github.com/wddlz/CSC720"
   },
   "keywords": [
     "static",

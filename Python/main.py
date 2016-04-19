@@ -5,18 +5,19 @@ import math
 # Lexical features
 # Count ternary operators
 def ternary_sequences():
-    pattern = re.compile('\s\?\s')  # TODO is this right?
+    pattern = re.compile('\s\?\s')
     return pattern
 
 
 # Function count
-# TODO need named functions and dynamic functions in JS
+# TODO No longer need as AST tree can handle
 def function_count():
     pattern = re.compile(r'\bfunction\b')
     return pattern
 
 
 # var count
+# TODO No longer need as AST tree can handle
 def var_count():
     pattern = re.compile(r'\bvar\b')
     return pattern
@@ -48,7 +49,7 @@ def white_space_count():
 
 
 # Inner word split
-def inner_word_split(): # TODO does not work in python
+def inner_word_split(): # does not work in python
     pattern = re.compile('(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])')
     return pattern
 
@@ -60,6 +61,7 @@ def underscore_split():
 
 
 # Identifier split
+# TODO No longer need as AST tree can handle
 def identifier_split():
     pattern = re.compile('(\W|\d)+')
     return pattern
@@ -67,13 +69,14 @@ def identifier_split():
 
 # Equals sign alignment of setting variables
 # TODO: how? is any = sign preceded or followed by a number of spaces > 1 proof of alignment?
+# TODO No longer need as AST tree can handle
 def equals_split():
     pattern = re.compile('(?<!=|!)=(?!=)')
     return pattern
 
 
 # Comment count
-# TODO: how to tell multiple consecutive comments? Can't assu,e all // are comments.
+# TODO: how to tell multiple consecutive comments? Can't assume all // are comments.
 # TODO: does it matter ("lines of comments" vs amount of lines of code commented)?
 # TODO: different pattern per language, // or /* for java, # for python, etc
 def comment_split():
@@ -196,10 +199,12 @@ def main():
                 increment_key_count_by_value('spSeq', seq, len(spaces))
                 whitespace = white_space_count().findall(l)
                 increment_key_count_by_value('wsSeq', seq, len(whitespace))
-                if l.strip().startswith('{') or l.strip().startswith('}'):
-                    # need boolean to see if this is the majority of lines
+                if l.strip().startswith('{'):  # or l.strip().startswith('}')
+                    # TODO need boolean to see if this is the majority of lines
                     increment_key_count_by_one('cuSeq', seq)
-                if l.startswith('\t'):  # need boolean to see if this is the majority of lines
+                elif l.strip().startswith('}'):
+                    increment_key_count_by_one('clSeq', seq)
+                if l.startswith('\t'):  # TODO need boolean to see if this is the majority of lines
                     increment_key_count_by_one('tsSeq', seq)
                 if len(l.strip()) == 0:  # empty line
                     increment_key_count_by_one('emSeq', seq)
@@ -227,13 +232,13 @@ def main():
             print "line count: ", seq['lineCount']
             print "character count: ", seq['charCount']
             print "underlines: ", seq['udSeq']
-            print "T2| literals (single equals): ", seq['eqSeq']
-            print "T2| function count: ", seq['fuSeq']
-            print "T2| var count: ", seq['vaSeq']
+            print "T2| literals (single equals): ", seq['eqSeq']  #
+            print "T2| function count: ", seq['fuSeq']  #
+            print "T2| var count: ", seq['vaSeq']  #
             print "T2| avgLineLength: ", average_length
             print "T2| comment(//) count: ", seq['coSeq']
             for keyword in lexical_keywords:
-                print "T2| lexical keyword count (" + keyword + "): ", seq[keyword + 'LexSeq']
+                print "T2| lexical keyword count (" + keyword + "): ", seq[keyword + 'LexSeq'] #
                 if seq[keyword + 'LexSeq'] > 0:
                     unique_keywords += 1
             print "T2| unique keywords: ", unique_keywords
@@ -242,7 +247,9 @@ def main():
             print "T3| spaces: ", seq['spSeq']
             print "T3| empty lines count: ", seq['emSeq']
             print "T3| whitespace: ", seq['wsSeq']
-            print "T3| lines that start with curly brackets: ", seq['cuSeq']
+            print "T3| lines that start with open curly brackets: ", seq['cuSeq']  #
+            print "T3| lines that start with end curly brackets: ", seq['clSeq']
+            print "T3| balance of brackets: ", seq['cuSeq'] - seq['clSeq']
             print "T3| line starts with tab: ", seq['tsSeq']
             for keyword in javascript_keywords:
                 print "T4| keyword count (" + keyword + "): ", seq[keyword + 'Seq']
