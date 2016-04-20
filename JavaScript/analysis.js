@@ -1,6 +1,8 @@
 var esprima = require("esprima");
 var options = { tokens: true, tolerant: true, loc: true, range: true, comment: true };
 var fs = require("fs");
+var female = 'C:\\Users\\wddlz\\Documents\\GitHub\\CSC720\\Files\\Female';
+var male = 'C:\\Users\\wddlz\\Documents\\GitHub\\CSC720\\Files\\Male'
 var imports = 0;
 var literals = 0;
 var identifiers = 0;
@@ -14,15 +16,56 @@ var size = 0; // esprima does not count trailing comments as lines contributing 
 var maximum = { scc: 0, mnd: 0, mc: 0, p: 0, l: 0 };
 var cumulative = { scc: 0, mnd: 0, mc: 0, p: 0, l: 0 };
 function main() {
-    var args = process.argv.slice(2);
+    var maleFiles = fs.readdirSync(male);
+    var femaleFiles = fs.readdirSync(female);
 
-    if (args.length == 0) 
-    {
-        args = ["analysis.js"];
+    // for (f in maleFiles) {
+    //     console.log(maleFiles[f]);
+    // }
+    // for (f in femaleFiles) {
+    //     console.log(femaleFiles[f]);
+    // }
+
+    /*
+     * Remove single processing in favor of batch (directory) processing  
+     */
+    // var args = process.argv.slice(2);
+
+    // if (args.length == 0) 
+    // {
+    //     args = ["analysis.js"];
+    // }
+    // var filePath = args[0];
+
+    // !important TODO flip these depending on which gender category is being ran
+    /* FLIP MALE */
+    // for (f in maleFiles) {
+    //     process(male + '\\', maleFiles[f]);
+    // }
+    /* END FLIP */
+
+    /* FLIP FEMALE */
+    for (f in femaleFiles) {
+        process(female + '\\', femaleFiles[f]);
     }
-    var filePath = args[0];
+    /* END FLIP */
+}
 
-    complexity(filePath);
+function process(d, f) {
+    console.log('file:'  + d + f);
+    // reset values for new file being proccessed
+    imports = 0;
+    literals = 0;
+    identifiers = 0;
+    vars = 0;
+    functions = 0;
+    decisions = 0;
+    size = 0;
+    maximum = { scc: 0, mnd: 0, mc: 0, p: 0, l: 0 };
+    cumulative = { scc: 0, mnd: 0, mc: 0, p: 0, l: 0 };
+    builders = {};
+    
+    complexity(d + f);
 
     // Report
     for (var node in builders) {
@@ -56,8 +99,23 @@ function main() {
     console.log('PROG: Imports, Functions, Literals, Identifiers, Vars, Decisions, Size || MAX(func): CyclComp, NestDepth, MaxConde, Params, Size || CUMULATIVEMAX(func): CyclComp, NestDepth, MaxConde, Params, Size');
     console.log(('{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16}').format(imports, functions, literals, identifiers, vars, decisions, size,
         maximum.scc, maximum.mnd, maximum.mc, maximum.p, maximum.l, cumulative.scc, cumulative.mnd, cumulative.mc, cumulative.p, cumulative.l));
+        
+    var fname = 'temp';
+    if (d == male + '\\') {
+        fname = 'm_';
+    } else if (d == female + '\\') {
+        fname = 'f_';
+    }
+    
+    fs.appendFile(fname + f + '_res.txt', 
+        ('{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16}')
+        .format(imports, functions, literals, identifiers, vars, decisions, size, 
+            maximum.scc, maximum.mnd, maximum.mc, maximum.p, maximum.l, cumulative.scc, cumulative.mnd, cumulative.mc, cumulative.p, cumulative.l), 
+        function (err) { 
+            if (err) throw err;
+            console.log('Data appended to file');
+        });
 }
-
 var builders = {};
 
 // Represent a reusable "class" following the Builder pattern.

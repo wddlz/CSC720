@@ -146,9 +146,6 @@ def increment_key_count_by_value(key, i_seq, val):
 def main():
     # TODO: loop through files to collect data
     filename = ''
-    print "User ID of files: "
-    user_id = raw_input("> ")
-    print "User ID %r: " % user_id
     while filename != '-1':
         print "Filename for reading (write \'-1\' when finished):"
         filename = raw_input("> ")
@@ -217,7 +214,7 @@ def main():
                 txt.close()
 
             # TODO output to file per id?
-            output = open("output" + user_id + ".txt", 'a+')
+            output = open(filename + "_res.txt", 'a+')
             output.write("test\n")
             output.write("T3| whitespace: " + str(seq['wsSeq']))
 
