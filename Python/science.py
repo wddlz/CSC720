@@ -1,13 +1,16 @@
-from sklearn import preprocessing, metrics, cross_validation, svm
+from sklearn import preprocessing, metrics, cross_validation, decomposition
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.feature_selection import RFE
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier  # , DecisionTreeRegressor
 from sklearn.svm import SVC
+# from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from matplotlib import pyplot as plt
 import numpy
 import glob
+# import pylab as pl
 
 female_dir = 'C:\\Users\\wddlz\\Documents\\GitHub\\CSC720\\Files\\ResFemale\\'
 male_dir = 'C:\\Users\\wddlz\\Documents\\GitHub\\CSC720\\Files\\ResMale\\'
@@ -26,82 +29,136 @@ with open('science.txt', 'w') as outfile:
             outfile.write(infile.read())
             outfile.write('\n')
 
-# iris = datasets.load_iris()
-# digits = datasets.load_digits()
-
 data_set = numpy.genfromtxt(
     'C:\\Users\\wddlz\\PycharmProjects\\AiGenderCode\\science.txt',
     delimiter=',')
+
 x = data_set[:, 1:74]
 y = data_set[:, 0]
+normalized_x = preprocessing.normalize(x)
+standardized_x = preprocessing.scale(x)
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(x, y, test_size=0.4, random_state=0)
-
-print ("\nCrossed\n")
 X_train_processed = preprocessing.scale(X_train)
-crossed = SVC().fit(X_train, y_train)
+
+
 print ("\nCROSS VALIDATION")
+crossed = SVC(kernel='poly', C=1).fit(X_train_processed, y_train)
 print ("TRAIN SHAPE X, y")
 print (str(X_train.shape) + ', ' + str(y_train.shape))
 print ("TEST SHAPE X, y")
 print (str(X_test.shape) + ', ' + str(y_test.shape))
 print (crossed.score(X_test, y_test))
 
-print ("\nCLF\n")
-clf = SVC()
-scores = cross_validation.cross_val_score(clf, x, y, cv=5)
-print (scores)
 
-normalized_x = preprocessing.normalize(x)
-standardized_x = preprocessing.scale(x)
+print ("\nCLF")
+clf = SVC(kernel='linear', C=1)
+scores = cross_validation.cross_val_score(clf, standardized_x, y, cv=10)
+print (scores)
+print("Accuracy: %0.2f (+/- %0.2f), MAX: %0.2f" % (scores.mean(), scores.std() * 2, scores.max()))
+
 model_tree_classy = ExtraTreesClassifier()
 model_tree_classy.fit(x, y)
 
+
+print ("\nLogisticRegression")
 model_logistic_regress = LogisticRegression()
 rfe = RFE(model_logistic_regress, 5)
 rfe = rfe.fit(x, y)
-model_logistic_regress.fit(x, y)
-print ("\nLogisticRegression")
+model_logistic_regress.fit(X_train, y_train)
 print (model_logistic_regress)
-expected = y
-predicted = model_logistic_regress.predict(x)
+expected = y_test
+predicted = model_logistic_regress.predict(X_test)
 print (metrics.classification_report(expected, predicted))
 print (metrics.confusion_matrix(expected, predicted))
 
+# Graph
+pca = decomposition.PCA(n_components=2)
+# lda = LinearDiscriminantAnalysis(n_components=2)
+# pca.fit(normalized_x)
+# decomp_X = pca.transform(normalized_x)
+# pl.scatter(decomp_X[:, 0], decomp_X[:, 1], c=y)
+# pl.show()
+X_r = pca.fit(normalized_x).transform(normalized_x)
+h = 0.02
+logreg = LogisticRegression(C=1e5)
+
+# we create an instance of Neighbours Classifier and fit the data.
+logreg.fit(X_r, y)
+
+# Plot the decision boundary. For that, we will assign a color to each
+# point in the mesh [x_min, m_max]x[y_min, y_max].
+x_min, x_max = X_r[:, 0].min() - .5, X_r[:, 0].max() + .5
+y_min, y_max = X_r[:, 1].min() - .5, X_r[:, 1].max() + .5
+xx, yy = numpy.meshgrid(numpy.arange(x_min, x_max, h), numpy.arange(y_min, y_max, h))
+Z = logreg.predict(numpy.c_[xx.ravel(), yy.ravel()])
+
+# Put the result into a color plot
+Z = Z.reshape(xx.shape)
+plt.figure(1, figsize=(4, 3))
+plt.pcolormesh(xx, yy, Z, cmap=plt.cm.Paired)
+
+# Plot also the training points
+plt.scatter(X_r[:, 0], X_r[:, 1], c=y, edgecolors='k', cmap=plt.cm.Paired)
+plt.xlabel('X')
+plt.ylabel('Y')
+
+plt.xlim(xx.min(), xx.max())
+plt.ylim(yy.min(), yy.max())
+plt.xticks(())
+plt.yticks(())
+
+plt.show()
+
+# X_l = lda.fit(x, y).transform(x)
+# plt.figure()
+# for c, i in zip("rb", [-1, 1]):
+#     plt.scatter(X_r[y == i, -1], X_r[y == i, 1], c=c)
+# plt.title('PCA')
+#
+# # plt.figure()
+# # for c, i in zip("rb", [-1, 1]):
+# #     plt.scatter(X_l[y == i, -1], X_l[y == i, 1], c=c)
+# plt.show()
+
 print ("\nNaiveBayes")
 model_gauss = GaussianNB()
-model_gauss.fit(x, y)
+model_gauss.fit(X_train, y_train)
 print (model_gauss)
-expected_gauss = y
-predicted_gauss = model_gauss.predict(x)
+expected_gauss = y_test
+predicted_gauss = model_gauss.predict(X_test)
 print (metrics.classification_report(expected_gauss, predicted_gauss))
 print (metrics.confusion_matrix(expected_gauss, predicted_gauss))
 
+
 print ("\nKNeighborsClassifier")
 model_kn = KNeighborsClassifier()
-model_kn.fit(x, y)
+model_kn.fit(X_train, y_train)
 print (model_kn)
-expected_kn = y
-predicted_kn = model_kn.predict(x)
+expected_kn = y_test
+predicted_kn = model_kn.predict(X_test)
 print (metrics.classification_report(expected_kn, predicted_kn))
 print (metrics.confusion_matrix(expected_kn, predicted_kn))
 
-print ("\nCART")
+
+print ("\nCART, Decision Tree Classifier")
 model_dtc = DecisionTreeClassifier()
-model_dtc.fit(x, y)
+model_dtc.fit(X_train, y_train)
 print (model_dtc)
-expected_dtc = y
-predicted_dtc = model_dtc.predict(x)
+expected_dtc = y_test
+predicted_dtc = model_dtc.predict(X_test)
 print (metrics.classification_report(expected_dtc, predicted_dtc))
 print (metrics.confusion_matrix(expected_dtc, predicted_dtc))
 
+
 print ("\nSVM")
 model_svc = SVC()
-model_svc.fit(x, y)
+model_svc.fit(X_train, y_train)
 print (model_svc)
-expected_svc = y
-predicted_svc = model_svc.predict(x)
+expected_svc = y_test
+predicted_svc = model_svc.predict(X_test)
 print (metrics.classification_report(expected_svc, predicted_svc))
 print (metrics.confusion_matrix(expected_svc, predicted_svc))
+
 
 print ("\nOTHERS")
 print ("\nDATA SET")
@@ -122,4 +179,3 @@ print ("\nFEATURE SELECTION SUPPORT")
 print (rfe.support_)
 print ("\n FEATURE SELECTION RANKING")
 print (rfe.ranking_)
-# print (data_set.target.shape)
