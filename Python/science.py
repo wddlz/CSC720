@@ -42,22 +42,32 @@ X_train_processed = preprocessing.scale(X_train)
 
 
 print ("\nCROSS VALIDATION")
-crossed = SVC(kernel='poly', C=1).fit(X_train_processed, y_train)
+crossed = SVC(kernel='poly', C=2)  # .fit(X_train_processed, y_train)
+crossed_scores = cross_validation.cross_val_score(crossed, standardized_x, y, cv=10)
+print (crossed_scores)
+print("Accuracy: %0.2f (+/- %0.2f), MAX: %0.2f" % (crossed_scores.mean(), crossed_scores.std() * 2,
+                                                   crossed_scores.max()))
 print ("TRAIN SHAPE X, y")
 print (str(X_train.shape) + ', ' + str(y_train.shape))
 print ("TEST SHAPE X, y")
 print (str(X_test.shape) + ', ' + str(y_test.shape))
-print (crossed.score(X_test, y_test))
+# print (crossed.score(X_test, y_test))
 
 
 print ("\nCLF")
-clf = SVC(kernel='linear', C=1)
+clf = SVC(kernel='linear', C=2)
 scores = cross_validation.cross_val_score(clf, standardized_x, y, cv=10)
 print (scores)
 print("Accuracy: %0.2f (+/- %0.2f), MAX: %0.2f" % (scores.mean(), scores.std() * 2, scores.max()))
 
 model_tree_classy = ExtraTreesClassifier()
 model_tree_classy.fit(x, y)
+
+print ("\nREG")
+reg = LogisticRegression()
+scores = cross_validation.cross_val_score(reg, standardized_x, y, cv=10)
+print (scores)
+print("Accuracy: %0.2f (+/- %0.2f), MAX: %0.2f" % (scores.mean(), scores.std() * 2, scores.max()))
 
 
 print ("\nLogisticRegression")
@@ -79,7 +89,7 @@ pca = decomposition.PCA(n_components=2)
 # pl.scatter(decomp_X[:, 0], decomp_X[:, 1], c=y)
 # pl.show()
 X_r = pca.fit(normalized_x).transform(normalized_x)
-h = 0.02
+h = .02
 logreg = LogisticRegression(C=1e5)
 
 # we create an instance of Neighbours Classifier and fit the data.
