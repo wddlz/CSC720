@@ -1,0 +1,191 @@
+C:\Users\wddlz\PycharmProjects\AiGenderCode>python science.py
+
+CROSS VALIDATION
+[ 0.52380952  0.47619048  0.57142857  0.38095238  0.42857143  0.57142857
+  0.55        0.6         0.55        0.55      ]
+Accuracy: 0.52 (+/- 0.13), MAX: 0.60
+TRAIN SHAPE X, y
+(123L, 73L), (123L,)
+TEST SHAPE X, y
+(83L, 73L), (83L,)
+
+CLF
+[ 0.71428571  0.57142857  0.66666667  0.61904762  0.61904762  0.47619048
+  0.65        0.75        0.7         0.55      ]
+Accuracy: 0.63 (+/- 0.16), MAX: 0.75
+
+REG
+[ 0.76190476  0.57142857  0.76190476  0.66666667  0.61904762  0.52380952
+  0.7         0.8         0.7         0.6       ]
+Accuracy: 0.67 (+/- 0.17), MAX: 0.80
+
+LogisticRegression
+LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
+          intercept_scaling=1, max_iter=100, multi_class='ovr', n_jobs=1,
+          penalty='l2', random_state=None, solver='liblinear', tol=0.0001,
+          verbose=0, warm_start=False)
+             precision    recall  f1-score   support
+
+       -1.0       0.69      0.90      0.78        40
+        1.0       0.87      0.63      0.73        43
+
+avg / total       0.78      0.76      0.76        83
+
+[[36  4]
+ [16 27]]
+
+NaiveBayes
+GaussianNB()
+             precision    recall  f1-score   support
+
+       -1.0       0.51      0.97      0.67        40
+        1.0       0.83      0.12      0.20        43
+
+avg / total       0.68      0.53      0.43        83
+
+[[39  1]
+ [38  5]]
+
+KNeighborsClassifier
+KNeighborsClassifier(algorithm='auto', leaf_size=30, metric='minkowski',
+           metric_params=None, n_jobs=1, n_neighbors=5, p=2,
+           weights='uniform')
+             precision    recall  f1-score   support
+
+       -1.0       0.54      0.50      0.52        40
+        1.0       0.57      0.60      0.58        43
+
+avg / total       0.55      0.55      0.55        83
+
+[[20 20]
+ [17 26]]
+
+CART, Decision Tree Classifier
+DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=None,
+            max_features=None, max_leaf_nodes=None, min_samples_leaf=1,
+            min_samples_split=2, min_weight_fraction_leaf=0.0,
+            presort=False, random_state=None, splitter='best')
+             precision    recall  f1-score   support
+
+       -1.0       0.57      0.60      0.59        40
+        1.0       0.61      0.58      0.60        43
+
+avg / total       0.59      0.59      0.59        83
+
+[[24 16]
+ [18 25]]
+
+SVM
+SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
+  decision_function_shape=None, degree=3, gamma='auto', kernel='rbf',
+  max_iter=-1, probability=False, random_state=None, shrinking=True,
+  tol=0.001, verbose=False)
+C:\Anaconda2\lib\site-packages\sklearn\metrics\classification.py:1074: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+             precision    recall  f1-score   support
+
+       -1.0       0.00      0.00      0.00        40
+        1.0       0.52      1.00      0.68        43
+
+avg / total       0.27      0.52      0.35        83
+
+[[ 0 40]
+ [ 0 43]]
+
+OTHERS
+
+DATA SET
+[[ -1.   0.   3. ...,   0.   3.   0.]
+ [ -1.   0.   2. ...,   0.   0.   0.]
+ [ -1.   0.   1. ...,   0.   2.   0.]
+ ...,
+ [  1.   0.  27. ...,   0.   2.   0.]
+ [  1.   0.   1. ...,   0.   0.   0.]
+ [  1.   0.   0. ...,   0.   2.   0.]]
+
+DATA
+[[   0.    3.    7. ...,    0.    0.    3.]
+ [   0.    2.    4. ...,    0.    0.    0.]
+ [   0.    1.    5. ...,    0.    0.    2.]
+ ...,
+ [   0.   27.  351. ...,    0.    0.    2.]
+ [   0.    1.   95. ...,    0.    0.    0.]
+ [   0.    0.  241. ...,    2.    0.    2.]]
+
+NORMALIZED
+[[  0.00000000e+00   9.84606825e-04   2.29741593e-03 ...,   0.00000000e+00
+    0.00000000e+00   9.84606825e-04]
+ [  0.00000000e+00   1.23379554e-03   2.46759108e-03 ...,   0.00000000e+00
+    0.00000000e+00   0.00000000e+00]
+ [  0.00000000e+00   6.29546773e-04   3.14773386e-03 ...,   0.00000000e+00
+    0.00000000e+00   1.25909355e-03]
+ ...,
+ [  0.00000000e+00   7.60888265e-04   9.89154744e-03 ...,   0.00000000e+00
+    0.00000000e+00   5.63620937e-05]
+ [  0.00000000e+00   2.63142572e-04   2.49985444e-02 ...,   0.00000000e+00
+    0.00000000e+00   0.00000000e+00]
+ [  0.00000000e+00   0.00000000e+00   1.42225042e-02 ...,   1.18029081e-04
+    0.00000000e+00   1.18029081e-04]]
+
+STANDARDIZED
+[[ 0.          0.0186378  -0.19624166 ..., -0.11874746 -0.18584838
+   2.31767869]
+ [ 0.         -0.16419011 -0.20226039 ..., -0.11874746 -0.18584838
+  -0.42099326]
+ [ 0.         -0.34701802 -0.20025415 ..., -0.11874746 -0.18584838
+   1.40478804]
+ ...,
+ [ 0.          4.40650755  0.49390569 ..., -0.11874746 -0.18584838
+   1.40478804]
+ [ 0.         -0.34701802 -0.01969234 ..., -0.11874746 -0.18584838
+  -0.42099326]
+ [ 0.         -0.52984592  0.27321903 ...,  3.64463362 -0.18584838
+   1.40478804]]
+
+TARGET
+[-1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1.
+ -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1.
+ -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1.
+ -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1.
+ -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1.
+ -1. -1. -1. -1. -1. -1. -1. -1. -1. -1.  1.  1.  1.  1.  1.  1.  1.  1.
+  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.
+  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.
+  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.
+  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.
+  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.  1.
+  1.  1.  1.  1.  1.  1.  1.  1.]
+
+DATA SET SHAPE
+(206L, 75L)
+
+FEATURE IMPORTANCES
+[ 0.          0.01276927  0.0143932   0.01946911  0.02075112  0.01760696
+  0.0227846   0.01393938  0.01555802  0.00853695  0.01026766  0.02245889
+  0.01625838  0.01535584  0.01298446  0.01734302  0.02414051  0.00724665
+  0.0224763   0.01836945  0.01150054  0.04242375  0.02899342  0.01604507
+  0.01150331  0.01532025  0.0195751   0.01847758  0.01593378  0.0134344
+  0.01944017  0.04083141  0.01662256  0.0348843   0.01835138  0.01663105
+  0.01651388  0.01574102  0.014095    0.01212246  0.00458636  0.01774114
+  0.00788847  0.00921485  0.00611847  0.          0.00311654  0.
+  0.00419265  0.01104998  0.00818211  0.00821145  0.          0.
+  0.00103648  0.01987996  0.02541398  0.01103463  0.          0.00476032
+  0.0065228   0.01089427  0.02012158  0.          0.00561145  0.02383473
+  0.02387878  0.00658738  0.0037779   0.02891174  0.00243066  0.00183821
+  0.01201289]
+
+FEATURE SELECTION SUPPORT
+[False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False  True False False False False False False False False  True False
+ False False False False  True False False False False False  True  True
+ False]
+
+ FEATURE SELECTION RANKING
+[69 17 46 60 34 43 56 48 10  7 45 51 37  9  8 24 52 42 62 55 61 53 40 31 14
+ 57 59 50 58 18 21 22 38 12 49 20  4 39 64 32 11 16 15 29 63 19  6 68  3  1
+ 26 27 65 54 67 47 30 41  1 33 28 44 36 66  1 35  5  2 13 25  1  1 23]
+
+C:\Users\wddlz\PycharmProjects\AiGenderCode>e
